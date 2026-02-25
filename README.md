@@ -2,7 +2,6 @@
 
 API desenvolvida para gerenciamento interno de talentos e candidatos da plataforma **Zencode Talently**.
 
-O projeto utiliza armazenamento em memória (DTO + Array) e não depende de banco de dados tradicional.
 
 ---
 
@@ -25,17 +24,17 @@ O objetivo é organizar talentos internos e futuros da Zencode de forma simples 
 O projeto utiliza:
 
 - DTO (Data Transfer Objects)
-- Classes Model com métodos de manipulação
-- Armazenamento em memória (`db[]`)
+- Armazenamento PosgreSql
 - Autenticação via Bearer Token (exceto login)
 
 ---
 
 ## 🔐 Autenticação
 
-Todos endpoints (exceto login) exigem:
-
-
+- **Login:** `/api/v1/auth_login_user` → **não requer token**
+- **Demais rotas:** requere **Bearer Token** no header
+```http
+Authorization: Bearer <TOKEN>
 
 O endpoint `/api/v1/auth_login_user` retorna o token de autenticação.
 
@@ -49,16 +48,24 @@ O endpoint `/api/v1/auth_login_user` retorna o token de autenticação.
 
 ---
 
-### 🔒 Protegidos
+# USUÁRIO
+| Método | Endpoint                    | Headers                         | Body                                             | Resposta Exemplo                                                              |
+| ------ | --------------------------- | ------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| POST   | `/api/v1/auth_login_user`   | —                               | `{ email: "user@test.com", password: "123456" }` | `{ token: "JWT_TOKEN", user: { firstname: "John", email: "user@test.com" } }` |
+| GET    | `/api/v1/user_find_account` | `Authorization: Bearer <TOKEN>` | `{ query: "John" }`                              | `[ { firstname: "John", email: "user@test.com", uid: "xxx" } ]`               |
 
-- `GET /api/v1/user_find_account`
-- `POST /api/v1/candidate_create`
-- `GET /api/v1/candidate_find_all`
-- `GET /api/v1/candidate_find_one?search=value`
-- `POST /api/v1/candidate_updateOne`
-- `POST /api/v1/candidate_destroyOne?uid=value`
 
----
+# CANDIDATODS
+
+| Método | Endpoint                       | Headers                         | Body                                                                             | Resposta Exemplo                                                           |
+| ------ | ------------------------------ | ------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| POST   | `/api/v1/candidate_create`     | `Authorization: Bearer <TOKEN>` | `{ fullname: "Maria Silva", email: "maria@test.com", position: "Frontend Dev" }` | `{ uid: "xxx", fullname: "Maria Silva", email: "maria@test.com" }`         |
+| POST    | `/api/v1/candidate_find_all`   | `Authorization: Bearer <TOKEN>` | —                                                                                | `[ { uid: "xxx", fullname: "Maria Silva", email: "maria@test.com" } ]`     |
+| POST    | `/api/v1/candidate_find_one`   | `Authorization: Bearer <TOKEN>` | `{ query: "Maria" }`                                                             | `[ { uid: "xxx", fullname: "Maria Silva" } ]`                              |
+| POST    | `/api/v1/candidate_updateOne`  | `Authorization: Bearer <TOKEN>` | `{ uid: "xxx", position: "Senior Frontend Dev" }`                                | `{ uid: "xxx", fullname: "Maria Silva", position: "Senior Frontend Dev" }` |
+| POST | `/api/v1/candidate_destroyOne` | `Authorization: Bearer <TOKEN>` | `{ uid: "xxx" }`                                                                 | `[ ...rest ]`                                                              |
+| POST   | `/api/v1/candidate_upset`      | `Authorization: Bearer <TOKEN>` | `{ uid?: "xxx", fullname: "Maria Silva", email: "maria@test.com" }`              | `{ uid: "xxx", fullname: "Maria Silva", email: "maria@test.com" }`         |
+
 
 ## 📦 Modelo de Dados
 
@@ -102,25 +109,6 @@ O endpoint `/api/v1/auth_login_user` retorna o token de autenticação.
 }
 ```
 
-
-🔎 Busca Dinâmica
-
-O método findOne realiza busca em qualquer campo do objeto:
-
-```ts
-Object.values(obj).some(value =>
-  String(value).toLowerCase().includes(search.toLowerCase())
-)
-```
-
-`Funciona de forma semelhante a um LIKE do SQL.`
-
-### ⚠️ Observação Importante
-
-O banco é apenas um array em memória.
-
-Ao reiniciar o servidor, os dados são perdidos.
-
 Projeto criado para fins de teste técnico.
 
 ### 🛠 Tecnologias
@@ -128,11 +116,11 @@ Projeto criado para fins de teste técnico.
 - TypeScript
 - Node.js
 - Express
-- DTO Pattern
+- PostgresSQL
+- Multer
+- JWT
+- Cors
 
-- Swagger (documentação)
-📄 Documentação
-A documentação da API está disponível via Swagger UI.
 
 
 👨‍💻 Autor
