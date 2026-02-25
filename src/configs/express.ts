@@ -9,7 +9,7 @@ const App = express()
 App.use(cors({
   origin: [
     "http://localhost:3000",
-    "*",
+    "https://zencode-frontend-teste.onrender.com",
   ],
   methods: ['GET', 'POST'],
 }));
