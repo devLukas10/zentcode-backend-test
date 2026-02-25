@@ -12,7 +12,7 @@ export const UsersController = () => {
             const response = await service.user_find_account(req.body.email);
 
             if (response === 302) return res.status(302).json('USER_ACCOUNT_NOT_FOUND')
-            
+            console.log(response)
             res.json(response);
             
         } catch {
