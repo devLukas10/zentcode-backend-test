@@ -48,24 +48,16 @@ O endpoint `/api/v1/auth_login_user` retorna o token de autenticação.
 
 ---
 
-# USUÁRIO
-| Método | Endpoint                    | Headers                         | Body                                             | Resposta Exemplo                                                              |
-| ------ | --------------------------- | ------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
-| POST   | `/api/v1/auth_login_user`   | —                               | `{ email: "user@test.com", password: "123456" }` | `{ token: "JWT_TOKEN", user: { firstname: "John", email: "user@test.com" } }` |
-| GET    | `/api/v1/user_find_account` | `Authorization: Bearer <TOKEN>` | `{ query: "John" }`                              | `[ { firstname: "John", email: "user@test.com", uid: "xxx" } ]`               |
+### 🔒 Protegidos
 
+- `GET /api/v1/user_find_account`
+- `POST /api/v1/candidate_create`
+- `POST /api/v1/candidate_find_all`
+- `POST /api/v1/candidate_find_one?search=value`
+- `POST /api/v1/candidate_updateOne`
+- `POST /api/v1/candidate_destroyOne?uid=value`
 
-# CANDIDATODS
-
-| Método | Endpoint                       | Headers                         | Body                                                                             | Resposta Exemplo                                                           |
-| ------ | ------------------------------ | ------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| POST   | `/api/v1/candidate_create`     | `Authorization: Bearer <TOKEN>` | `{ fullname: "Maria Silva", email: "maria@test.com", position: "Frontend Dev" }` | `{ uid: "xxx", fullname: "Maria Silva", email: "maria@test.com" }`         |
-| POST    | `/api/v1/candidate_find_all`   | `Authorization: Bearer <TOKEN>` | —                                                                                | `[ { uid: "xxx", fullname: "Maria Silva", email: "maria@test.com" } ]`     |
-| POST    | `/api/v1/candidate_find_one`   | `Authorization: Bearer <TOKEN>` | `{ query: "Maria" }`                                                             | `[ { uid: "xxx", fullname: "Maria Silva" } ]`                              |
-| POST    | `/api/v1/candidate_updateOne`  | `Authorization: Bearer <TOKEN>` | `{ uid: "xxx", position: "Senior Frontend Dev" }`                                | `{ uid: "xxx", fullname: "Maria Silva", position: "Senior Frontend Dev" }` |
-| POST | `/api/v1/candidate_destroyOne` | `Authorization: Bearer <TOKEN>` | `{ uid: "xxx" }`                                                                 | `[ ...rest ]`                                                              |
-| POST   | `/api/v1/candidate_upset`      | `Authorization: Bearer <TOKEN>` | `{ uid?: "xxx", fullname: "Maria Silva", email: "maria@test.com" }`              | `{ uid: "xxx", fullname: "Maria Silva", email: "maria@test.com" }`         |
-
+---
 
 ## 📦 Modelo de Dados
 
