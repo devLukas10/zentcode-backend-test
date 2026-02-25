@@ -1,8 +1,13 @@
 import { Sequelize } from "sequelize";
+import { ENV } from "../../env";
 
-export const db = new Sequelize("abckamba", "postgres", "2124",{
-    host: "localhost",
-    port: 5432,
-    dialect: "postgres",
-    logging: false,
-});
+export const db = new Sequelize(ENV._RENDER_DATABASE_URI,
+    {
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        }
+    }
+);
