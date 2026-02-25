@@ -19,5 +19,4 @@ export const UsersController = () => {
             res.status(405).json("INTERNAL_ERROR_TRY_LATER")
         }
     });
-
 }
